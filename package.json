@@ -1,0 +1,42 @@
+{
+  "name": "peepo-discord-bot",
+  "version": "1.0.0",
+  "main": "./src/main.ts",
+  "repository": "git@github.com:bondiolipietro/peepo-discord-bot.git",
+  "author": "Pietro Bondioli <pietrobondiolideveloper@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky install",
+    "build": "yarn tsc -p .",
+    "dev": "nodemon --watch src --exec yarn start",
+    "start": "yarn build && node build/main.js"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint src --ext .js,.ts",
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.4.0",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
+    "mathjs": "^9.4.4"
+  }
+}
