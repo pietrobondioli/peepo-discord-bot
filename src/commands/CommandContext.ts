@@ -7,7 +7,9 @@ class CommandContext extends CommandContextBase {
   protected commandList: ICommandList = CommandsList;
 
   configureStrategies(): void {
-    this.strategies[CommandType.Roll] = new RollCommandContext();
+    this.strategies[CommandType.Roll] = new RollCommandContext(
+      this.discordClient
+    );
   }
 }
 

@@ -1,10 +1,16 @@
-import { Message } from 'discord.js';
+import { Message, Client } from 'discord.js';
 import { ICommandStrategy } from './ICommandStrategy';
 
 abstract class CommandStrategyBase implements ICommandStrategy {
+  protected discordClient: Client;
+
   protected abstract commandPattern: RegExp;
 
   protected args?: {};
+
+  public constructor(client: Client) {
+    this.discordClient = client;
+  }
 
   protected identifyCommandArgs(command: string): void {
     const args = this.commandPattern.exec(command);
@@ -15,7 +21,7 @@ abstract class CommandStrategyBase implements ICommandStrategy {
     throw new Error('Could not identify command args.');
   }
 
-  abstract execute(message: Message): void;
+  abstract execute(message: Message): Promise<void>;
 }
 
 export { CommandStrategyBase };

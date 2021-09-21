@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, Client } from 'discord.js';
 import { ICommandStrategy } from './ICommandStrategy';
 
 interface ICommandList {
@@ -10,13 +10,16 @@ interface IStrategiesList {
 }
 
 abstract class CommandContextBase implements ICommandStrategy {
+  protected discordClient: Client;
+
   protected abstract commandList: ICommandList;
 
   protected strategies: IStrategiesList = {};
 
   protected strategy?: ICommandStrategy;
 
-  constructor() {
+  constructor(client: Client) {
+    this.discordClient = client;
     this.configureStrategies();
   }
 
@@ -29,12 +32,14 @@ abstract class CommandContextBase implements ICommandStrategy {
         return;
       }
     }
-    throw new Error('Could not find a strategy for this command.');
+    throw new Error(
+      `Could not find a strategy for this command. Command: ${command}`
+    );
   }
 
-  public execute(message: Message): void {
+  public async execute(message: Message): Promise<void> {
     this.identifyStrategy(message.content);
-    this.strategy!.execute(message);
+    await this.strategy!.execute(message);
   }
 }
 

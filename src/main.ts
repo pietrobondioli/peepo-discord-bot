@@ -12,15 +12,15 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-const command = new CommandContext();
+const command = new CommandContext(client);
 
-client.on('messageCreate', (message: Message) => {
+client.on('messageCreate', async (message: Message) => {
   try {
     if (message.author.id !== Constants.PEEPO_BOT_ID) {
-      command.execute(message);
+      await command.execute(message);
     }
   } catch (e) {
-    console.log(e);
+    console.warn(e);
   }
 });
 
