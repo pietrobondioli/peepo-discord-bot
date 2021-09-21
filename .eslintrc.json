@@ -30,6 +30,8 @@
         "no-restricted-syntax": "off",
         "no-return-assign": "off",
         "radix": "off",
-        "no-plusplus": "off"
+        "no-plusplus": "off",
+        "no-console": "off",
+        "no-await-in-loop": "off"
     }
 }

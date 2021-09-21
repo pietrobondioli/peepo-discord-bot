@@ -9,11 +9,13 @@ class RollCommandContext extends CommandContextBase {
   protected commandList: ICommandList = RollCommandsList;
 
   configureStrategies(): void {
-    this.strategies[RollCommandType.RollOneDice] = new RollOneDiceStrategy();
+    this.strategies[RollCommandType.RollOneDice] = new RollOneDiceStrategy(
+      this.discordClient
+    );
     this.strategies[RollCommandType.RollMultipleDices] =
-      new RollMultipleDicesStrategy();
+      new RollMultipleDicesStrategy(this.discordClient);
     this.strategies[RollCommandType.RollMultipleDicesAndSum] =
-      new RollMultipleDicesAndSumStrategy();
+      new RollMultipleDicesAndSumStrategy(this.discordClient);
   }
 }
 

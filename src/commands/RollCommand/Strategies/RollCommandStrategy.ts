@@ -1,4 +1,4 @@
-import { Message, MessageOptions } from 'discord.js';
+import { Message, MessageOptions, User } from 'discord.js';
 import * as math from 'mathjs';
 import { CommandStrategyBase } from '../../base/CommandStrategyBase';
 
@@ -12,14 +12,19 @@ interface RollCommandArgs {
   numberOfDices?: string;
   diceNumber?: string;
   additionalOperations?: string;
+  isPrivate?: string;
+  selfSendPrivateMessage?: string;
+  sendResponseTo?: string;
 }
 
 abstract class RollCommandStrategy extends CommandStrategyBase {
-  protected DICE_BASE_NUMBER: number = 0;
+  protected DICE_BASE_NUMBER: number = 1;
 
   protected args: RollCommandArgs = {};
 
   protected shouldApplyAdditionalOperationsOnDiceRollList: boolean = true;
+
+  protected recipients: User[] = [];
 
   protected assertIfRequiredArgsExists(): void {
     if (!this.args.diceNumber) {
@@ -77,23 +82,74 @@ abstract class RollCommandStrategy extends CommandStrategyBase {
     return diceRollList;
   }
 
+  protected async parseIdsAndGetUsers(): Promise<User[]> {
+    const users: User[] = [];
+    if (this.args.sendResponseTo) {
+      const idRegex = new RegExp('(?:<@!)(\\d+)(?:>)', 'g');
+      const matches = this.args.sendResponseTo.matchAll(idRegex);
+      for (const match of [...matches]) {
+        const user = await this.discordClient.users.fetch(match[1], {
+          cache: false,
+        });
+        users.push(user);
+      }
+    }
+    return users;
+  }
+
+  protected async getResponseMessageRecipients(): Promise<void> {
+    if (this.args.isPrivate) {
+      this.recipients = await this.parseIdsAndGetUsers();
+    }
+  }
+
+  protected getPrivateResponseMessage(
+    message: Message,
+    rollsList: DiceRoll[]
+  ): MessageOptions {
+    const response = this.getResponseMessage(message, rollsList);
+    response.content = `Command: ${message.content}\n\n`.concat(
+      response.content!
+    );
+    return response;
+  }
+
   protected abstract getResponseMessage(
     message: Message,
     rollsList: DiceRoll[]
   ): MessageOptions;
 
-  public execute(message: Message): void {
+  public async execute(message: Message): Promise<void> {
     this.identifyCommandArgs(message.content);
     this.assertIfRequiredArgsExists();
+
     let diceRollList = this.createDicesList();
     diceRollList = this.rollDiceList(diceRollList);
     diceRollList = this.applyAdditionalOperationsOnDiceRollList(diceRollList);
-    const response = this.getResponseMessage(message, diceRollList);
+
+    let response: MessageOptions;
+    if (this.args.isPrivate) {
+      response = this.getPrivateResponseMessage(message, diceRollList);
+    } else {
+      response = this.getResponseMessage(message, diceRollList);
+    }
+
+    await this.getResponseMessageRecipients();
+
     this.sendResponse(message, response);
   }
 
   protected sendResponse(message: Message, response: MessageOptions): void {
-    message.channel.send(response);
+    if (this.args.isPrivate) {
+      for (const user of this.recipients) {
+        user.send(response);
+      }
+      if (this.args.selfSendPrivateMessage) {
+        message.author.send(response);
+      }
+    } else {
+      message.channel.send(response);
+    }
   }
 }
 
