@@ -3,6 +3,7 @@ import { CalcCommandContext } from './CalcCommand/CalcCommandContext';
 import { RollCommandContext } from './RollCommand/RollCommandContext';
 import { TranslateCommandContext } from './TranslateCommand/TranslateCommandContext';
 import { WeatherCommandContext } from './WeatherCommand/WeatherCommandContext';
+import { YoMommaCommandContext } from './YoMommaCommand/YoMommaCommandContext';
 import { CommandsList } from './CommandsList';
 import { CommandType } from './CommandType';
 
@@ -20,6 +21,9 @@ class CommandContext extends CommandContextBase {
       this.discordClient
     );
     this.strategies[CommandType.Weather] = new WeatherCommandContext(
+      this.discordClient
+    );
+    this.strategies[CommandType.YoMommaJoke] = new YoMommaCommandContext(
       this.discordClient
     );
   }

@@ -3,6 +3,7 @@ enum CommandType {
   Calc = 'calc',
   Translate = 'translate',
   Weather = 'weather',
+  YoMommaJoke = 'yomommajoke',
 }
 
 export { CommandType };
