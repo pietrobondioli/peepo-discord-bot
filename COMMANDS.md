@@ -139,3 +139,35 @@ Command: ;roll 3 d20 +4 -p me @some_user
 The above message will be sent to: the private's chat of the user who issued the command and of @some_user.
 
 Note that you can use the two optional parameters together with no problems as long as you don't try to invert the order of them, like: `roll 3 d20 -p me @some_user +4` (it won't work).
+
+### **calc**
+
+With calc command you can perform any math operation.
+
+`;calc <expression>`
+
+Where \<expression\> is a math expression that will be resolved.
+
+### **translate**
+
+Translate command use google translator api to translate any input to any language.
+
+`;translate -<lang> <text>`
+
+Where \<lang\> is the language the text will be translated into, and text is the text that will be translated.
+
+### **weather**
+
+It uses the OpenWeather api to get info about current weather.
+
+`;weather <cityName>`
+
+Where \<cityName\> is the name of the city from which the info about the weather will be get.
+
+### **yomomma**
+
+Displays a joke about your mom.
+
+`;yomomma -<lang>`
+
+Where \<lang\> is an optional parameter that can be passed if you want the joke to be translated.
