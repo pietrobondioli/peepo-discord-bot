@@ -1,4 +1,4 @@
-import { Message, MessageOptions, User } from 'discord.js';
+import { Message, BaseMessageOptions, User } from 'discord.js';
 import * as math from 'mathjs';
 import { CommandStrategyBase } from '../../base/CommandStrategyBase';
 
@@ -85,7 +85,7 @@ abstract class RollCommandStrategy extends CommandStrategyBase {
   protected async parseIdsAndGetUsers(): Promise<User[]> {
     const users: User[] = [];
     if (this.args.sendResponseTo) {
-      const idRegex = new RegExp('(?:<@!)(\\d+)(?:>)', 'g');
+      const idRegex = /(?:<@!)(\\d+)(?:>)/g;
       const matches = this.args.sendResponseTo.matchAll(idRegex);
       for (const match of [...matches]) {
         const user = await this.discordClient.users.fetch(match[1], {
@@ -106,7 +106,7 @@ abstract class RollCommandStrategy extends CommandStrategyBase {
   protected getPrivateResponseMessage(
     message: Message,
     rollsList: DiceRoll[]
-  ): MessageOptions {
+  ): BaseMessageOptions {
     const response = this.getResponseMessage(message, rollsList);
     response.content = `Command: ${message.content}\n\n`.concat(
       response.content!
@@ -117,7 +117,7 @@ abstract class RollCommandStrategy extends CommandStrategyBase {
   protected abstract getResponseMessage(
     message: Message,
     rollsList: DiceRoll[]
-  ): MessageOptions;
+  ): BaseMessageOptions;
 
   public async execute(message: Message): Promise<void> {
     this.identifyCommandArgs(message.content);
@@ -127,7 +127,7 @@ abstract class RollCommandStrategy extends CommandStrategyBase {
     diceRollList = this.rollDiceList(diceRollList);
     diceRollList = this.applyAdditionalOperationsOnDiceRollList(diceRollList);
 
-    let response: MessageOptions;
+    let response: BaseMessageOptions;
     if (this.args.isPrivate) {
       response = this.getPrivateResponseMessage(message, diceRollList);
     } else {
@@ -139,7 +139,7 @@ abstract class RollCommandStrategy extends CommandStrategyBase {
     this.sendResponse(message, response);
   }
 
-  protected sendResponse(message: Message, response: MessageOptions): void {
+  protected sendResponse(message: Message, response: BaseMessageOptions): void {
     if (this.args.isPrivate) {
       for (const user of this.recipients) {
         user.send(response);

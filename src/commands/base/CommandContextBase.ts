@@ -38,6 +38,7 @@ abstract class CommandContextBase implements ICommandStrategy {
   }
 
   public async execute(message: Message): Promise<void> {
+    console.log(JSON.stringify(message));
     this.identifyStrategy(message.content);
     await this.strategy!.execute(message);
   }

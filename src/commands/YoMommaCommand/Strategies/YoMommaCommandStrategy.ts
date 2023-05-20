@@ -1,4 +1,4 @@
-import { Client, Message, MessageOptions } from 'discord.js';
+import { Client, Message, BaseMessageOptions } from 'discord.js';
 import { Joke } from '../../../models/services/YoMomma/Joke';
 import { YoMommaService } from '../../../services/YoMommaService';
 import { CommandStrategyBase } from '../../base/CommandStrategyBase';
@@ -28,7 +28,7 @@ class YoMommaCommandStrategy extends CommandStrategyBase {
     }
   }
 
-  protected getResponseMessage(yoMommaJoke: Joke): MessageOptions {
+  protected getResponseMessage(yoMommaJoke: Joke): BaseMessageOptions {
     const content = `-----\n${yoMommaJoke.joke}\n-----`;
     return { content };
   }
@@ -44,7 +44,7 @@ class YoMommaCommandStrategy extends CommandStrategyBase {
     this.sendResponse(message, response);
   }
 
-  protected sendResponse(message: Message, response: MessageOptions): void {
+  protected sendResponse(message: Message, response: BaseMessageOptions): void {
     message.channel.send(response);
   }
 }

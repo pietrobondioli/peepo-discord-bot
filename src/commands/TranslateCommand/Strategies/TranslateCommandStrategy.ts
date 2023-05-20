@@ -1,4 +1,4 @@
-import { Client, Message, MessageOptions } from 'discord.js';
+import { Client, Message, BaseMessageOptions } from 'discord.js';
 import { GoogleTranslationService } from '../../../services/GoogleTranslationService';
 import { CommandStrategyBase } from '../../base/CommandStrategyBase';
 import { TranslateCommandsList } from '../TranslateCommandsList';
@@ -34,7 +34,7 @@ class TranslateCommandStrategy extends CommandStrategyBase {
     }
   }
 
-  protected getResponseMessage(translation: string): MessageOptions {
+  protected getResponseMessage(translation: string): BaseMessageOptions {
     const content = `Translation: ${translation}`;
     return { content };
   }
@@ -56,7 +56,7 @@ class TranslateCommandStrategy extends CommandStrategyBase {
     this.sendResponse(message, response);
   }
 
-  protected sendResponse(message: Message, response: MessageOptions): void {
+  protected sendResponse(message: Message, response: BaseMessageOptions): void {
     message.channel.send(response);
   }
 }

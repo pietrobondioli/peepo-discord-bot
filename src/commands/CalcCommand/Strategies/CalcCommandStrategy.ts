@@ -1,4 +1,4 @@
-import { Message, MessageOptions } from 'discord.js';
+import { Message, BaseMessageOptions } from 'discord.js';
 import * as math from 'mathjs';
 import { CommandStrategyBase } from '../../base/CommandStrategyBase';
 import { CalcCommandsList } from '../CalcCommandsList';
@@ -29,7 +29,9 @@ class CalcCommandStrategy extends CommandStrategyBase {
     return math.evaluate(expression);
   }
 
-  protected getResponseMessage(mathExpressionResult: number): MessageOptions {
+  protected getResponseMessage(
+    mathExpressionResult: number
+  ): BaseMessageOptions {
     const content = `Result: ${mathExpressionResult}`;
     return { content };
   }
@@ -45,7 +47,7 @@ class CalcCommandStrategy extends CommandStrategyBase {
     this.sendResponse(message, response);
   }
 
-  protected sendResponse(message: Message, response: MessageOptions): void {
+  protected sendResponse(message: Message, response: BaseMessageOptions): void {
     message.channel.send(response);
   }
 }

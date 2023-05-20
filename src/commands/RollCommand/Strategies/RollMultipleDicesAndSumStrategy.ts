@@ -1,4 +1,4 @@
-import { Message, MessageOptions } from 'discord.js';
+import { Message, BaseMessageOptions } from 'discord.js';
 import { RollCommandsList } from '../RollCommandsList';
 import { RollCommandType } from '../RollCommandType';
 import { DiceRoll, RollCommandStrategy } from './RollCommandStrategy';
@@ -18,7 +18,7 @@ class RollMultipleDicesAndSumStrategy extends RollCommandStrategy {
   protected getResponseMessage(
     message: Message,
     diceRollList: DiceRoll[]
-  ): MessageOptions {
+  ): BaseMessageOptions {
     const rollListSum = this.getDicesRollListSum(diceRollList);
     const content = `${message.member?.displayName} Rolls: \`[${diceRollList
       .map((diceRoll) => diceRoll.roll)

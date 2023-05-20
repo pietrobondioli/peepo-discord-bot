@@ -1,4 +1,4 @@
-import { Client, Message, MessageOptions } from 'discord.js';
+import { Client, Message, BaseMessageOptions } from 'discord.js';
 import { WeatherResponse } from '../../../models/services/OpenWeather/WeatherResponse';
 import { OpenWeatherService } from '../../../services/OpenWeatherService';
 import { CommandStrategyBase } from '../../base/CommandStrategyBase';
@@ -28,7 +28,7 @@ class WeatherCommandStrategy extends CommandStrategyBase {
     }
   }
 
-  protected getResponseMessage(weather: WeatherResponse): MessageOptions {
+  protected getResponseMessage(weather: WeatherResponse): BaseMessageOptions {
     const content = `-----\nCity: ${weather.name}\nDescription: ${weather.weather[0].description}\nTemperature: ${weather.main.temp}\nFells like: ${weather.main.feels_like}\nTemp max: ${weather.main.temp_max}\nTemp min: ${weather.main.temp_min}\n-----`;
     return { content };
   }
@@ -46,7 +46,7 @@ class WeatherCommandStrategy extends CommandStrategyBase {
     this.sendResponse(message, response);
   }
 
-  protected sendResponse(message: Message, response: MessageOptions): void {
+  protected sendResponse(message: Message, response: BaseMessageOptions): void {
     message.channel.send(response);
   }
 }

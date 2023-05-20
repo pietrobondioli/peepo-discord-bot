@@ -1,4 +1,4 @@
-import { Message, MessageOptions } from 'discord.js';
+import { Message, BaseMessageOptions } from 'discord.js';
 import { RollCommandsList } from '../RollCommandsList';
 import { RollCommandType } from '../RollCommandType';
 import { DiceRoll, RollCommandStrategy } from './RollCommandStrategy';
@@ -16,7 +16,7 @@ class RollOneDiceStrategy extends RollCommandStrategy {
   protected getResponseMessage(
     message: Message,
     diceRollList: DiceRoll[]
-  ): MessageOptions {
+  ): BaseMessageOptions {
     const content = `${message.member?.displayName} Roll: \`[${diceRollList[0].roll}]\` Result: ${diceRollList[0].result} `;
     return { content };
   }
